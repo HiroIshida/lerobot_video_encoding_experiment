@@ -6,7 +6,7 @@ import imageio.v2 as imageio
 from typing import Literal
 import tqdm
 import torch
-import matplotlib.pyplot as plt
+import json
 
 
 def single_experiment(
@@ -61,6 +61,7 @@ def single_experiment(
 
 if __name__ == "__main__":
     codecs = ["libsvtav1", "h264"]
+
     gops = [2, 4, 8, 16]
     fast_decode = 0
 
@@ -77,30 +78,7 @@ if __name__ == "__main__":
             results[codec]["sizes"].append(dataset_size)
 
     print("\nAll experiments completed.")
-
-    plt.style.use("seaborn-v0_8-whitegrid")
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4), sharex=True)
-
-    for codec in codecs:
-        ax1.plot(gops, results[codec]["times"], marker="o", linestyle="-", label=codec)
-    ax1.set_title("Decode Speed vs. GOP Size", fontsize=14)
-    ax1.set_xlabel("GOP Size", fontsize=12)
-    ax1.set_ylabel("Decode Time (seconds)", fontsize=12)
-    ax1.set_xticks(gops)
-    ax1.grid(True)
-    ax1.legend(title="Codec")
-
-    for codec in codecs:
-        sizes_mb = [s / (1024 * 1024) for s in results[codec]["sizes"]]
-        ax2.plot(gops, sizes_mb, marker="o", linestyle="-", label=codec)
-    ax2.set_title("Dataset Size vs. GOP Size", fontsize=14)
-    ax2.set_xlabel("GOP Size", fontsize=12)
-    ax2.set_ylabel("Dataset Size (MB)", fontsize=12)
-    ax2.set_xticks(gops)
-    ax2.grid(True)
-    ax2.legend(title="Codec")
-
-    fig.suptitle(f"fast_decode={fast_decode}", fontsize=16)
-    fig.tight_layout()
-    fig.savefig("results_side_by_side.png", dpi=200)
-    plt.close(fig)
+    # save as json
+    with open("results.json", "w") as f:
+        json.dump(results, f, indent=4)
+    print("Results saved to results.json")
