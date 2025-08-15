@@ -23,9 +23,9 @@ if __name__ == "__main__":
                 fontsize=9,
             )
 
-    plt.title("Trade-off: Dataset Size vs. Decode Time", fontsize=14)
-    plt.xlabel("Decode Time (seconds)", fontsize=12)
-    plt.ylabel("Dataset Size (MB)", fontsize=12)
+    plt.title("Trade-off: Size vs. Decode Time", fontsize=14)
+    plt.xlabel("Decode Time [s]", fontsize=12)
+    plt.ylabel("Dataset Size [MB]", fontsize=12)
     plt.grid(True)
     plt.legend(title="Codec")
     fig.tight_layout()

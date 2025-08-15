@@ -34,12 +34,14 @@ def single_experiment(
         for rgb in rbgs:
             frame = {"observation.images.rgb": rgb.transpose(2, 0, 1)}
             dataset.add_frame(frame, "test")
-        opt = {
-            "vcodec": codec,
-            "fast_decode": fast_decode,
-            "g": gop,
+        opt = {"video_encode":
+               {
+                "vcodec": codec,
+                "fast_decode": fast_decode,
+                "g": gop,
+                }
         }
-        dataset.save_episode(video_encode_option=opt)
+        dataset.save_episode(options=opt)
 
     total_size = sum(f.stat().st_size for f in dataset_path.rglob("*") if f.is_file())
 
